@@ -1,0 +1,211 @@
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<title>Втора или последна вечност – Мелек Сали</title>
+<!-- Open Graph / Facebook -->
+<meta property="og:title" content="Втора или последна вечност – Поезия от Мелек Сали">
+<meta property="og:description" content="Ефимерна дигитална книга: Стихотворение, което се изписва, остава за миг и изчезва, отразявайки апатията и търсенето на смисъл.">
+<meta property="og:image" content="https://deyan80.github.io/ephemeral-book/ephemeral-poetry-bg.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://deyan80.github.io/ephemeral-book/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="bg_BG">
+<meta name="description" content="Ефимерна поезия от Мелек Сали – текст, който се появява и изчезва като спомен.">
+<style>
+body {
+background: linear-gradient(rgba(219, 238, 255, 0.8), rgba(238, 246, 255, 0.8)), url('ephemeral-poetry-bg.jpg') no-repeat center/cover;
+color: #1f2a33;
+font-family: "Georgia", serif;
+margin: 0;
+padding: 40px;
+line-height: 1.75;
+cursor: pointer;
+overflow: hidden;
+position: relative;
+}
+#book {
+max-width: 800px;
+margin: auto;
+font-size: 18px;
+white-space: pre-wrap;
+word-wrap: break-word;
+position: relative;
+z-index: 2;
+text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+.char {
+opacity: 0;
+animation: appear 0.5s forwards;
+transition: opacity 180s linear, color 0.3s;
+}
+.char:hover {
+color: #4a90e2;
+text-shadow: 0 0 10px #4a90e2;
+}
+.fade {
+animation: fadeOut 60s linear forwards;
+}
+@keyframes appear {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeOut {
+to { opacity: 0; }
+}
+#hourglass {
+position: fixed;
+inset: 0;
+margin: auto;
+width: 220px;
+height: 340px;
+opacity: 0.25;
+pointer-events: none;
+z-index: 1;
+filter: blur(2px);
+}
+#hourglass::before,
+#hourglass::after {
+content: "";
+position: absolute;
+left: 0;
+width: 100%;
+height: 50%;
+border: 3px solid rgba(180, 200, 220, 0.8);
+border-bottom: none;
+border-radius: 120px 120px 40px 40px;
+background: rgba(255, 255, 255, 0.25);
+backdrop-filter: blur(2px);
+}
+#hourglass::after {
+bottom: 0;
+transform: rotate(180deg);
+}
+.sand {
+position: absolute;
+left: 50%;
+transform: translateX(-50%);
+width: 70px;
+background: linear-gradient(#fff1a8, #f2d36b);
+overflow: hidden;
+}
+.sand.top {
+top: 40px;
+height: 110px;
+clip-path: polygon(0 0, 100% 0, 50% 100%);
+animation: sandTop 300s linear forwards;
+}
+.sand.bottom {
+bottom: 40px;
+height: 0;
+clip-path: polygon(50% 0, 0 100%, 100% 100%);
+animation: sandBottom 300s linear forwards;
+}
+@keyframes sandTop {
+from { height: 110px; }
+to { height: 0; }
+}
+@keyframes sandBottom {
+from { height: 0; }
+to { height: 110px; }
+}
+/* Частици за по-интересно изживяване */
+.particles {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+pointer-events: none;
+z-index: 1;
+}
+.particle {
+position: absolute;
+background: rgba(255, 255, 255, 0.8);
+border-radius: 50%;
+animation: fadeParticle 10s linear infinite;
+}
+@keyframes fadeParticle {
+0% { opacity: 1; transform: translateY(0); }
+100% { opacity: 0; transform: translateY(100vh); }
+}
+audio {
+display: none;
+}
+@media (max-width: 768px) {
+body { padding: 20px; }
+#book { font-size: 16px; }
+#hourglass { width: 150px; height: 240px; }
+}
+</style>
+</head>
+<body>
+<div id="hourglass">
+<div class="sand top"></div>
+<div class="sand bottom"></div>
+</div>
+<div id="book"></div>
+<div class="particles" id="particles"></div>
+<audio id="bgMusic" loop autoplay>
+<source src="song.mp3" type="audio/mpeg">
+</audio>
+<script>
+const text = `
+Втора или последна вечност
+Докога ще сме така –
+в тази суматоха от плашеща еднаквост, навсякъде отнесени
+погледи и шум без глъчка, ние, незапълнената цялост.
+Как да изтрием бедността в очите,
+как да върнем всички наши частици –
+ние не можем да променим обграждащия ни сив свят,
+не можем да си спомним този свят.
+Ние сме само силуети в реалност, която не умее добре да ни
+очертава,
+живеем в апатия, която ни напълно изтощава.
+Как се очаква да се открием – ние,
+отдавна недокосваните по сърца, уморените от чувства,
+слабите по душа – докога ще сме така.
+64 Мелек Сали По гънки и остри ръбове
+`;
+const book = document.getElementById("book");
+const music = document.getElementById("bgMusic");
+music.volume = 0.3; // Тиха музика
+let index = 0;
+const typingSpeed = 50; // По-бавен за драма
+const fadeDelay = 120000; // По-дълъг престой
+function typeWriter() {
+if (index < text.length) {
+const span = document.createElement("span");
+span.className = "char";
+span.textContent = text[index];
+book.appendChild(span);
+setTimeout(() => {
+span.classList.add("fade");
+}, fadeDelay + Math.random() * 30000); // Вълнообразен fade
+index++;
+window.scrollTo(0, document.body.scrollHeight);
+setTimeout(typeWriter, typingSpeed);
+}
+}
+typeWriter();
+// Частици
+function createParticles() {
+const particlesContainer = document.getElementById("particles");
+for (let i = 0; i < 50; i++) {
+const particle = document.createElement("div");
+particle.className = "particle";
+particle.style.width = `${Math.random() * 3 + 1}px`;
+particle.style.height = particle.style.width;
+particle.style.left = `${Math.random() * 100}%`;
+particle.style.animationDelay = `${Math.random() * 10}s`;
+particlesContainer.appendChild(particle);
+}
+}
+createParticles();
+// Рестарт с клик
+document.body.addEventListener("click", () => {
+location.reload();
+});
+</script>
+</body>
+</html>
